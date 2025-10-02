@@ -2,19 +2,18 @@ package Persistencia;
 
 import java.sql.*;
 import javax.swing.JOptionPane;
-import org.mariadb.jdbc.Connection;
+
 
 /* @author Grupo 11 */
+
 public class Conexion {
 
-    // atributo(s)
     private static final String URL = "jdbc:mariadb://localhost/";
     private static final String DB = "gp11_bd_1er";
     private static final String USUARIO = "root";
     private static final String PASSWORD = "";
     private static Connection connection;
 
-    // constructor(es)
     private Conexion() {
     }
 
@@ -33,5 +32,4 @@ public class Conexion {
         return connection;
     }
 
-    // getter(s) & setter(s)
 }
