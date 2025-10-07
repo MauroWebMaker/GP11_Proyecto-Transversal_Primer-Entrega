@@ -1,12 +1,8 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package Vista;
 
 /**
  *
- * @author Juan Cruz
+ * @author Grupo 11
  */
 public class VistaPrincipal extends javax.swing.JFrame {
 
@@ -38,7 +34,6 @@ public class VistaPrincipal extends javax.swing.JFrame {
         jMenuNotas = new javax.swing.JMenu();
         jMenuItemNotas = new javax.swing.JMenuItem();
         jMenuSalir = new javax.swing.JMenu();
-        jMenuItemSalir = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -85,10 +80,11 @@ public class VistaPrincipal extends javax.swing.JFrame {
         jMenuBar1.add(jMenuNotas);
 
         jMenuSalir.setText("Salir");
-
-        jMenuItemSalir.setText("jMenuItem5");
-        jMenuSalir.add(jMenuItemSalir);
-
+        jMenuSalir.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jMenuSalirMouseClicked(evt);
+            }
+        });
         jMenuBar1.add(jMenuSalir);
 
         setJMenuBar(jMenuBar1);
@@ -108,6 +104,10 @@ public class VistaPrincipal extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jMenuSalirMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuSalirMouseClicked
+        System.exit(WIDTH);
+    }//GEN-LAST:event_jMenuSalirMouseClicked
 
     /**
      * @param args the command line arguments
@@ -154,7 +154,6 @@ public class VistaPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItemMateria;
     private javax.swing.JMenuItem jMenuItemModificarAlumno;
     private javax.swing.JMenuItem jMenuItemNotas;
-    private javax.swing.JMenuItem jMenuItemSalir;
     private javax.swing.JMenu jMenuMateria;
     private javax.swing.JMenu jMenuNotas;
     private javax.swing.JMenu jMenuSalir;

@@ -1,12 +1,8 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JInternalFrame.java to edit this template
- */
 package Vista;
 
 /**
  *
- * @author facun
+ * @author Grupo 11
  */
 public class ListarMaterias extends javax.swing.JInternalFrame {
 
@@ -108,7 +104,7 @@ public class ListarMaterias extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_IDAlumnoTFActionPerformed
 
     private void SalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SalirActionPerformed
-        // TODO add your handling code here:
+        this.dispose();
     }//GEN-LAST:event_SalirActionPerformed
 
 
