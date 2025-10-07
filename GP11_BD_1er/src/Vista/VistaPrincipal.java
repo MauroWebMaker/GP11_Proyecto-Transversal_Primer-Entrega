@@ -29,7 +29,8 @@ public class VistaPrincipal extends javax.swing.JFrame {
         jDesktopPane1 = new javax.swing.JDesktopPane();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenuAlumno = new javax.swing.JMenu();
-        jMenuItemAlumno = new javax.swing.JMenuItem();
+        jMenuItemListarAlumno = new javax.swing.JMenuItem();
+        jMenuItemModificarAlumno = new javax.swing.JMenuItem();
         jMenuMateria = new javax.swing.JMenu();
         jMenuItemMateria = new javax.swing.JMenuItem();
         jMenuInscripcion = new javax.swing.JMenu();
@@ -49,19 +50,22 @@ public class VistaPrincipal extends javax.swing.JFrame {
         );
         jDesktopPane1Layout.setVerticalGroup(
             jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 350, Short.MAX_VALUE)
+            .addGap(0, 347, Short.MAX_VALUE)
         );
 
         jMenuAlumno.setText("Alumno");
 
-        jMenuItemAlumno.setText("Listar Alumnos");
-        jMenuAlumno.add(jMenuItemAlumno);
+        jMenuItemListarAlumno.setText("Listar Alumnos");
+        jMenuAlumno.add(jMenuItemListarAlumno);
+
+        jMenuItemModificarAlumno.setText("Modificar Alumno");
+        jMenuAlumno.add(jMenuItemModificarAlumno);
 
         jMenuBar1.add(jMenuAlumno);
 
         jMenuMateria.setText("Materia");
 
-        jMenuItemMateria.setText("jMenuItem2");
+        jMenuItemMateria.setText("Listar Materias");
         jMenuMateria.add(jMenuItemMateria);
 
         jMenuBar1.add(jMenuMateria);
@@ -93,13 +97,13 @@ public class VistaPrincipal extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jDesktopPane1)
+            .addComponent(jDesktopPane1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jDesktopPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jDesktopPane1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pack();
@@ -145,9 +149,10 @@ public class VistaPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenu jMenuAlumno;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenu jMenuInscripcion;
-    private javax.swing.JMenuItem jMenuItemAlumno;
     private javax.swing.JMenuItem jMenuItemInscripcion;
+    private javax.swing.JMenuItem jMenuItemListarAlumno;
     private javax.swing.JMenuItem jMenuItemMateria;
+    private javax.swing.JMenuItem jMenuItemModificarAlumno;
     private javax.swing.JMenuItem jMenuItemNotas;
     private javax.swing.JMenuItem jMenuItemSalir;
     private javax.swing.JMenu jMenuMateria;

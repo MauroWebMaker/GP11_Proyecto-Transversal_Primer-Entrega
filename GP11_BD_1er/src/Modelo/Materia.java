@@ -7,6 +7,7 @@ public class Materia {
     private int idMateria;
     private String nombre;
     private int anio;
+    private double calificacion;
     private boolean estado;
     
     // constructor(es)
@@ -15,6 +16,7 @@ public class Materia {
         this.nombre = nombre;
         this.anio = anio;
         this.estado = estado;
+        this.calificacion = 0.0;
     }
     
     // método(s)
@@ -51,6 +53,14 @@ public class Materia {
 
     public void setEstado(boolean estado) {
         this.estado = estado;
+    }
+
+    public double getCalificacion() {
+        return calificacion;
+    }
+
+    public void setCalificacion(double calificacion) {
+        this.calificacion = calificacion;
     }
     
 }
