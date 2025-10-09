@@ -1,16 +1,44 @@
 package Vista;
 
+import Modelo.Alumno;
+import Persistencia.AlumnoData;
+import Persistencia.Conexion;
+//import com.sun.jdi.connect.spi.Connection;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+
 /**
  *
  * @author Grupo 11
+ * Punto 1
+ * Permitir al personal administrativo listar las materias que cursa un alumno.
  */
 public class ListarMaterias extends javax.swing.JInternalFrame {
+    
+    private int contrasena = 1234; // contrasena para los admin
+    private DefaultTableModel tablaMaterias = new DefaultTableModel();
+    
+    AlumnoData Alumno1 = new AlumnoData();
+    
+    private void armarTabla() {
+        tablaMaterias.addColumn("ID");
+        tablaMaterias.addColumn("Apellido");
+        tablaMaterias.addColumn("Nombre");
+        tablaMaterias.addColumn("Materia");
+        Tabla.setModel(tablaMaterias);
+    }
 
     /**
      * Creates new form ListarMaterias
      */
     public ListarMaterias() {
         initComponents();
+        
     }
 
     /**
@@ -24,12 +52,14 @@ public class ListarMaterias extends javax.swing.JInternalFrame {
 
         ListadoDeMaterias = new javax.swing.JLabel();
         IDAlumno = new javax.swing.JLabel();
-        IDAlumnoTF = new javax.swing.JTextField();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        ListaMaterias = new javax.swing.JList<>();
+        IngresarID = new javax.swing.JTextField();
         Salir = new javax.swing.JButton();
         SPA = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        Tabla = new javax.swing.JTable();
 
+        setClosable(true);
+        setResizable(true);
         setPreferredSize(new java.awt.Dimension(420, 350));
 
         ListadoDeMaterias.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
@@ -38,13 +68,19 @@ public class ListarMaterias extends javax.swing.JInternalFrame {
 
         IDAlumno.setText("ID del Alumno:");
 
-        IDAlumnoTF.addActionListener(new java.awt.event.ActionListener() {
+        IngresarID.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                IDAlumnoTFActionPerformed(evt);
+                IngresarIDActionPerformed(evt);
             }
         });
-
-        jScrollPane1.setViewportView(ListaMaterias);
+        IngresarID.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                IngresarIDKeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                IngresarIDKeyTyped(evt);
+            }
+        });
 
         Salir.setText("Salir");
         Salir.addActionListener(new java.awt.event.ActionListener() {
@@ -55,6 +91,27 @@ public class ListarMaterias extends javax.swing.JInternalFrame {
 
         SPA.setText("(solo personal administrativo)");
 
+        Tabla.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
+            },
+            new String [] {
+                "ID Alumno", "Nombre", "Apellido", "ID Materia", "Materia"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane2.setViewportView(Tabla);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -62,59 +119,114 @@ public class ListarMaterias extends javax.swing.JInternalFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(94, 94, 94)
+                        .addGap(30, 30, 30)
+                        .addComponent(SPA, javax.swing.GroupLayout.PREFERRED_SIZE, 282, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(Salir))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(86, 86, 86)
                         .addComponent(ListadoDeMaterias, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(24, 24, 24)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 439, Short.MAX_VALUE)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(IDAlumno)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(IDAlumnoTF))
-                            .addComponent(jScrollPane1)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(SPA, javax.swing.GroupLayout.PREFERRED_SIZE, 282, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(Salir)))))
-                .addContainerGap(24, Short.MAX_VALUE))
+                                .addComponent(IngresarID)))))
+                .addGap(12, 12, 12))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(12, 12, 12)
+                .addContainerGap()
                 .addComponent(ListadoDeMaterias, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(12, 12, 12)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(IDAlumno, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(IDAlumnoTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(IngresarID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(Salir)
-                    .addComponent(SPA))
-                .addGap(0, 10, Short.MAX_VALUE))
+                    .addComponent(SPA)
+                    .addComponent(Salir))
+                .addGap(0, 42, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void IDAlumnoTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_IDAlumnoTFActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_IDAlumnoTFActionPerformed
+    private void IngresarIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_IngresarIDActionPerformed
+           
+    }//GEN-LAST:event_IngresarIDActionPerformed
 
     private void SalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SalirActionPerformed
         this.dispose();
     }//GEN-LAST:event_SalirActionPerformed
 
+    private void IngresarIDKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_IngresarIDKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_IngresarIDKeyTyped
+
+    private void IngresarIDKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_IngresarIDKeyReleased
+         if (!IngresarID.getText().isEmpty()){
+            listarMateriasPorAlumno(Integer.parseInt(IngresarID.getText()));
+   
+        }else {
+            JOptionPane.showMessageDialog(this, "No se ingresó correctamente el ID del alumno.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_IngresarIDKeyReleased
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel IDAlumno;
-    private javax.swing.JTextField IDAlumnoTF;
-    private javax.swing.JList<String> ListaMaterias;
+    private javax.swing.JTextField IngresarID;
     private javax.swing.JLabel ListadoDeMaterias;
     private javax.swing.JLabel SPA;
     private javax.swing.JButton Salir;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable Tabla;
+    private javax.swing.JScrollPane jScrollPane2;
     // End of variables declaration//GEN-END:variables
+
+    private void listarMateriasPorAlumno(int idAlumno) {
+    DefaultTableModel modelo = new DefaultTableModel();
+    modelo.addColumn("ID Alumno");
+    modelo.addColumn("Nombre");
+    modelo.addColumn("Apellido");
+    modelo.addColumn("ID Materia");
+    modelo.addColumn("Materia");
+    
+    Tabla.setModel(modelo);
+    
+    String sql = "SELECT a.idAlumno, a.nombre, a.apellido, m.idMateria, m.nombre AS nombreMateria " +
+             "FROM inscripcion i " +
+             "JOIN alumno a ON i.idAlumno = a.idAlumno " +
+             "JOIN materia m ON i.idMateria = m.idMateria " +
+             "WHERE i.idAlumno = ?";
+    
+    try (Connection con = Conexion.getConexion();
+         PreparedStatement ps = con.prepareStatement(sql)) {
+        
+        ps.setInt(1, idAlumno);
+        ResultSet rs = ps.executeQuery();
+        
+        while (rs.next()) {
+            Object[] fila = {
+                rs.getInt("idAlumno"),
+                rs.getString("nombre"),
+                rs.getString("apellido"),
+                rs.getInt("idMateria"),
+                rs.getString("nombreMateria")
+            };
+            modelo.addRow(fila);
+        }
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(this, "Error al listar materias: " + e.getMessage());
+    }
+}    
+    
+
+
+
 }

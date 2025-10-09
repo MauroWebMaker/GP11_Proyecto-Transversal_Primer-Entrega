@@ -51,6 +51,11 @@ public class VistaPrincipal extends javax.swing.JFrame {
         jMenuAlumno.setText("Alumno");
 
         jMenuItemListarAlumno.setText("Listar Alumnos");
+        jMenuItemListarAlumno.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemListarAlumnoActionPerformed(evt);
+            }
+        });
         jMenuAlumno.add(jMenuItemListarAlumno);
 
         jMenuItemModificarAlumno.setText("Modificar Alumno");
@@ -67,14 +72,14 @@ public class VistaPrincipal extends javax.swing.JFrame {
 
         jMenuInscripcion.setText("Inscripción");
 
-        jMenuItemInscripcion.setText("jMenuItem3");
+        jMenuItemInscripcion.setText("Inscripciones");
         jMenuInscripcion.add(jMenuItemInscripcion);
 
         jMenuBar1.add(jMenuInscripcion);
 
         jMenuNotas.setText("Notas");
 
-        jMenuItemNotas.setText("jMenuItem4");
+        jMenuItemNotas.setText("Calificaciones");
         jMenuNotas.add(jMenuItemNotas);
 
         jMenuBar1.add(jMenuNotas);
@@ -108,6 +113,15 @@ public class VistaPrincipal extends javax.swing.JFrame {
     private void jMenuSalirMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuSalirMouseClicked
         System.exit(WIDTH);
     }//GEN-LAST:event_jMenuSalirMouseClicked
+
+    private void jMenuItemListarAlumnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemListarAlumnoActionPerformed
+        jDesktopPane1.removeAll();
+        jDesktopPane1.repaint();
+        ListarMaterias aux = new ListarMaterias();
+        aux.setVisible(true);
+        jDesktopPane1.add(aux);
+        jDesktopPane1.moveToFront(aux);
+    }//GEN-LAST:event_jMenuItemListarAlumnoActionPerformed
 
     /**
      * @param args the command line arguments

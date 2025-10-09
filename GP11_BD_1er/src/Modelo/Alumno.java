@@ -6,7 +6,7 @@ import java.time.LocalDate;
 
 public class Alumno {
     // atributo(s)
-    private int idAlumno;
+    private Integer idAlumno;
     private int dni;
     private String apellido;
     private String nombre;
