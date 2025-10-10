@@ -1,5 +1,13 @@
 package Vista;
 
+import Persistencia.Conexion;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author Grupo 11
@@ -24,27 +32,30 @@ public class ModificarMateria extends javax.swing.JInternalFrame {
 
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        IDMateria = new javax.swing.JTextField();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        ListaMaterias = new javax.swing.JList<>();
+        IngresarIDMateria = new javax.swing.JTextField();
         DarDeAltaMateria = new javax.swing.JButton();
         DarDeBajaMateria = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         Salir = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        TablaAltaBajaMateria = new javax.swing.JTable();
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Alta/baja de Materias");
+        jLabel1.setText("Alta / Baja de Materias");
 
         jLabel2.setText("ID de Materia:");
 
-        IDMateria.addActionListener(new java.awt.event.ActionListener() {
+        IngresarIDMateria.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                IDMateriaActionPerformed(evt);
+                IngresarIDMateriaActionPerformed(evt);
             }
         });
-
-        jScrollPane1.setViewportView(ListaMaterias);
+        IngresarIDMateria.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                IngresarIDMateriaKeyReleased(evt);
+            }
+        });
 
         DarDeAltaMateria.setText("Dar de alta");
         DarDeAltaMateria.addActionListener(new java.awt.event.ActionListener() {
@@ -69,36 +80,54 @@ public class ModificarMateria extends javax.swing.JInternalFrame {
             }
         });
 
+        TablaAltaBajaMateria.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
+            },
+            new String [] {
+                "ID Materias", "Nombre", "Estado"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane2.setViewportView(TablaAltaBajaMateria);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(94, 94, 94)
                         .addComponent(jLabel1))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(24, 24, 24)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(IDMateria))
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 371, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(DarDeBajaMateria)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(DarDeAltaMateria))
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 371, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(jLabel2)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(IngresarIDMateria, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGroup(layout.createSequentialGroup()
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(DarDeAltaMateria)
-                                .addGap(18, 18, 18)
-                                .addComponent(DarDeBajaMateria))
-                            .addGroup(layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 282, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(18, 18, 18)
-                        .addComponent(Salir)))
-                .addContainerGap(13, Short.MAX_VALUE))
+                                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 282, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(Salir)))))
+                .addContainerGap(30, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -108,30 +137,26 @@ public class ModificarMateria extends javax.swing.JInternalFrame {
                 .addGap(12, 12, 12)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(IDMateria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
+                    .addComponent(IngresarIDMateria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(DarDeAltaMateria)
-                    .addComponent(DarDeBajaMateria))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addComponent(Salir)
-                        .addGap(0, 18, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel3)
-                        .addContainerGap())))
+                    .addComponent(DarDeBajaMateria)
+                    .addComponent(DarDeAltaMateria))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(Salir))
+                .addGap(0, 22, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void IDMateriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_IDMateriaActionPerformed
+    private void IngresarIDMateriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_IngresarIDMateriaActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_IDMateriaActionPerformed
+    }//GEN-LAST:event_IngresarIDMateriaActionPerformed
 
     private void DarDeAltaMateriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DarDeAltaMateriaActionPerformed
         // TODO add your handling code here:
@@ -145,16 +170,54 @@ public class ModificarMateria extends javax.swing.JInternalFrame {
         this.dispose();
     }//GEN-LAST:event_SalirActionPerformed
 
+    private void IngresarIDMateriaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_IngresarIDMateriaKeyReleased
+         if (!IngresarIDMateria.getText().isEmpty()) {
+            listarMateriasAltaBaja(Integer.parseInt(IngresarIDMateria.getText()));
+        } else {
+            JOptionPane.showMessageDialog(this, "No se ingresó correctamente el ID de la materia.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_IngresarIDMateriaKeyReleased
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton DarDeAltaMateria;
     private javax.swing.JButton DarDeBajaMateria;
-    private javax.swing.JTextField IDMateria;
-    private javax.swing.JList<String> ListaMaterias;
+    private javax.swing.JTextField IngresarIDMateria;
     private javax.swing.JButton Salir;
+    private javax.swing.JTable TablaAltaBajaMateria;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     // End of variables declaration//GEN-END:variables
+
+    private void listarMateriasAltaBaja(int idMateria) {
+        DefaultTableModel modelo = new DefaultTableModel();
+        modelo.addColumn("ID Materia");
+        modelo.addColumn("Nombre");
+        modelo.addColumn("Estado");
+
+        TablaAltaBajaMateria.setModel(modelo);
+
+        String sql = "SELECT m.idMaeria, m.nombre, m.estado"
+                + "FROM materia m "
+                + "WHERE m.idMateria = ?";
+
+        try (Connection con = Conexion.getConexion(); PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, idMateria);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Object[] fila = {
+                    rs.getInt("idMateria"),
+                    rs.getString("nombre"),
+                    rs.getBoolean("estado"),};
+                modelo.addRow(fila);
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Error al listar materias: " + e.getMessage());
+        }
+
+    }
 }

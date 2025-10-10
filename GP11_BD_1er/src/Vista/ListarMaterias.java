@@ -3,7 +3,6 @@ package Vista;
 import Modelo.Alumno;
 import Persistencia.AlumnoData;
 import Persistencia.Conexion;
-//import com.sun.jdi.connect.spi.Connection;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import java.sql.Connection;
@@ -20,18 +19,9 @@ import java.sql.SQLException;
  */
 public class ListarMaterias extends javax.swing.JInternalFrame {
     
-    private int contrasena = 1234; // contrasena para los admin
-    private DefaultTableModel tablaMaterias = new DefaultTableModel();
-    
+    //private DefaultTableModel tablaMaterias = new DefaultTableModel();
     AlumnoData Alumno1 = new AlumnoData();
-    
-    private void armarTabla() {
-        tablaMaterias.addColumn("ID");
-        tablaMaterias.addColumn("Apellido");
-        tablaMaterias.addColumn("Nombre");
-        tablaMaterias.addColumn("Materia");
-        Tabla.setModel(tablaMaterias);
-    }
+   
 
     /**
      * Creates new form ListarMaterias

@@ -1,11 +1,20 @@
 package Vista;
 
+import Persistencia.Conexion;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author Grupo 11
  */
 public class ModificarAlumno extends javax.swing.JInternalFrame {
 
+    //private DefaultTableModel tablaAltaBaja = new DefaultTableModel();
     /**
      * Creates new form ModificarAlumno
      */
@@ -24,27 +33,30 @@ public class ModificarAlumno extends javax.swing.JInternalFrame {
 
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        IDAlumno = new javax.swing.JTextField();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        ListaAltaBaja = new javax.swing.JList<>();
+        IngresarIDAlumno = new javax.swing.JTextField();
         Salir = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         DarDeBajaAlumno = new javax.swing.JButton();
         DarDeAltaAlumno = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        TablaAltaBaja = new javax.swing.JTable();
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Alta/baja de Alumnos");
+        jLabel1.setText("Alta / Baja de Alumnos");
 
         jLabel2.setText("ID de Alumno:");
 
-        IDAlumno.addActionListener(new java.awt.event.ActionListener() {
+        IngresarIDAlumno.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                IDAlumnoActionPerformed(evt);
+                IngresarIDAlumnoActionPerformed(evt);
             }
         });
-
-        jScrollPane1.setViewportView(ListaAltaBaja);
+        IngresarIDAlumno.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                IngresarIDAlumnoKeyReleased(evt);
+            }
+        });
 
         Salir.setText("Salir");
         Salir.addActionListener(new java.awt.event.ActionListener() {
@@ -69,12 +81,33 @@ public class ModificarAlumno extends javax.swing.JInternalFrame {
             }
         });
 
+        TablaAltaBaja.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "ID Alumno", "Apellido", "Nombre", "Estado"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, true, true
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane2.setViewportView(TablaAltaBaja);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(94, 94, 94)
                         .addComponent(jLabel1))
@@ -82,23 +115,21 @@ public class ModificarAlumno extends javax.swing.JInternalFrame {
                         .addGap(24, 24, 24)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(IDAlumno))
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 371, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(DarDeAltaAlumno)
-                                .addGap(18, 18, 18)
-                                .addComponent(DarDeBajaAlumno))
-                            .addGroup(layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 282, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(18, 18, 18)
-                        .addComponent(Salir)))
-                .addContainerGap(13, Short.MAX_VALUE))
+                                .addComponent(DarDeBajaAlumno)
+                                .addGap(193, 193, 193)
+                                .addComponent(DarDeAltaAlumno))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                    .addGap(6, 6, 6)
+                                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 282, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(Salir))
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(jLabel2)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(IngresarIDAlumno, javax.swing.GroupLayout.PREFERRED_SIZE, 283, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))))
+                .addContainerGap(26, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -108,30 +139,30 @@ public class ModificarAlumno extends javax.swing.JInternalFrame {
                 .addGap(12, 12, 12)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(IDAlumno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(DarDeAltaAlumno)
-                    .addComponent(DarDeBajaAlumno))
+                    .addComponent(IngresarIDAlumno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 266, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addComponent(Salir)
-                        .addGap(0, 18, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(DarDeBajaAlumno)
+                            .addComponent(DarDeAltaAlumno))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel3)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(56, 56, 56)
+                        .addComponent(Salir)
                         .addContainerGap())))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void IDAlumnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_IDAlumnoActionPerformed
+    private void IngresarIDAlumnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_IngresarIDAlumnoActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_IDAlumnoActionPerformed
+    }//GEN-LAST:event_IngresarIDAlumnoActionPerformed
 
     private void SalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SalirActionPerformed
         this.dispose();
@@ -145,16 +176,57 @@ public class ModificarAlumno extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_DarDeAltaAlumnoActionPerformed
 
+    private void IngresarIDAlumnoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_IngresarIDAlumnoKeyReleased
+        if (!IngresarIDAlumno.getText().isEmpty()) {
+            listarAlumnosAltaBaja(Integer.parseInt(IngresarIDAlumno.getText()));
+        } else {
+            JOptionPane.showMessageDialog(this, "No se ingresó correctamente el ID del alumno.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
+    }//GEN-LAST:event_IngresarIDAlumnoKeyReleased
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton DarDeAltaAlumno;
     private javax.swing.JButton DarDeBajaAlumno;
-    private javax.swing.JTextField IDAlumno;
-    private javax.swing.JList<String> ListaAltaBaja;
+    private javax.swing.JTextField IngresarIDAlumno;
     private javax.swing.JButton Salir;
+    private javax.swing.JTable TablaAltaBaja;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     // End of variables declaration//GEN-END:variables
+
+    private void listarAlumnosAltaBaja(int idAlumno) {
+        DefaultTableModel modelo = new DefaultTableModel();
+        modelo.addColumn("ID Alumno");
+        modelo.addColumn("Apellido");
+        modelo.addColumn("Nombre");
+        modelo.addColumn("Estado");
+
+        TablaAltaBaja.setModel(modelo);
+
+        String sql = "SELECT a.idAlumno, a.idAlumno, a.nombre, a.estado"
+                + "FROM alumno a "
+                + "WHERE a.idAlumno = ?";
+
+        try (Connection con = Conexion.getConexion(); PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, idAlumno);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Object[] fila = {
+                    rs.getInt("idAlumno"),
+                    rs.getString("apellido"),
+                    rs.getString("nombre"),
+                    rs.getBoolean("estado"),};
+                modelo.addRow(fila);
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Error al listar alumnos: " + e.getMessage());
+        }
+
+    }
 }
