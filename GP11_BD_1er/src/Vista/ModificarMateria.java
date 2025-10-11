@@ -203,7 +203,8 @@ public class ModificarMateria extends javax.swing.JInternalFrame {
                 + "FROM materia m "
                 + "WHERE m.idMateria = ?";
 
-        try (Connection con = Conexion.getConexion(); PreparedStatement ps = con.prepareStatement(sql)) {
+        try (Connection con = Conexion.getConexion(); 
+                PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setInt(1, idMateria);
             ResultSet rs = ps.executeQuery();

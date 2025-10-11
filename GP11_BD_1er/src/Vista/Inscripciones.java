@@ -1,5 +1,16 @@
 package Vista;
 
+import Persistencia.Conexion;
+import javax.swing.table.DefaultTableModel;
+import org.mariadb.jdbc.Connection;
+
+import Persistencia.Conexion;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author Grupo 11
@@ -25,16 +36,17 @@ public class Inscripciones extends javax.swing.JInternalFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         IDAlumno = new javax.swing.JTextField();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        ListaMaterias = new javax.swing.JList<>();
         Salir = new javax.swing.JButton();
-        Inscribir = new javax.swing.JRadioButton();
-        Desinscribir = new javax.swing.JRadioButton();
+        botonInscribir = new javax.swing.JRadioButton();
+        botonDesinscribir = new javax.swing.JRadioButton();
         Confirmar = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        TablaIncripcion = new javax.swing.JTable();
+        botonBuscar = new javax.swing.JButton();
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Materias");
+        jLabel1.setText("Incripciones de Materias");
 
         jLabel2.setText("ID de Alumno:");
 
@@ -44,8 +56,6 @@ public class Inscripciones extends javax.swing.JInternalFrame {
             }
         });
 
-        jScrollPane1.setViewportView(ListaMaterias);
-
         Salir.setText("Salir");
         Salir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -53,22 +63,22 @@ public class Inscripciones extends javax.swing.JInternalFrame {
             }
         });
 
-        Inscribir.setText("Inscribir");
-        Inscribir.addMouseListener(new java.awt.event.MouseAdapter() {
+        botonInscribir.setText("Inscribir");
+        botonInscribir.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                InscribirMouseClicked(evt);
+                botonInscribirMouseClicked(evt);
             }
         });
-        Inscribir.addActionListener(new java.awt.event.ActionListener() {
+        botonInscribir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                InscribirActionPerformed(evt);
+                botonInscribirActionPerformed(evt);
             }
         });
 
-        Desinscribir.setText("Desinscribir");
-        Desinscribir.addMouseListener(new java.awt.event.MouseAdapter() {
+        botonDesinscribir.setText("Desinscribir");
+        botonDesinscribir.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                DesinscribirMouseClicked(evt);
+                botonDesinscribirMouseClicked(evt);
             }
         });
 
@@ -79,6 +89,34 @@ public class Inscripciones extends javax.swing.JInternalFrame {
             }
         });
 
+        TablaIncripcion.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
+            },
+            new String [] {
+                "ID Materia", "Nombre", "Estado"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane2.setViewportView(TablaIncripcion);
+
+        botonBuscar.setText("Buscar");
+        botonBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonBuscarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -86,47 +124,53 @@ public class Inscripciones extends javax.swing.JInternalFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(94, 94, 94)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(24, 24, 24)
+                        .addGap(75, 75, 75)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(Confirmar)
+                                .addGap(6, 6, 6)
+                                .addComponent(botonInscribir)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(Salir))
-                            .addComponent(jScrollPane1)
+                                .addComponent(botonDesinscribir))
+                            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(24, 24, 24)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addGroup(layout.createSequentialGroup()
+                                .addComponent(Salir)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(Confirmar))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addGap(6, 6, 6)
                                 .addComponent(jLabel2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(Inscribir)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(Desinscribir))
-                                    .addComponent(IDAlumno, javax.swing.GroupLayout.PREFERRED_SIZE, 269, javax.swing.GroupLayout.PREFERRED_SIZE))))))
-                .addContainerGap(27, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(IDAlumno, javax.swing.GroupLayout.PREFERRED_SIZE, 269, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(147, 147, 147)
+                        .addComponent(botonBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(44, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(12, 12, 12)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(botonInscribir)
+                    .addComponent(botonDesinscribir))
+                .addGap(12, 12, 12)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(IDAlumno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(1, 1, 1)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(Inscribir)
-                    .addComponent(Desinscribir))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(botonBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(Salir)
-                    .addComponent(Confirmar))
-                .addGap(0, 12, Short.MAX_VALUE))
+                    .addComponent(Confirmar)
+                    .addComponent(Salir))
+                .addGap(31, 31, 31))
         );
 
         pack();
@@ -140,32 +184,90 @@ public class Inscripciones extends javax.swing.JInternalFrame {
         this.dispose();
     }//GEN-LAST:event_SalirActionPerformed
 
-    private void InscribirMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_InscribirMouseClicked
+    private void botonInscribirMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botonInscribirMouseClicked
         // TODO add your handling code here:
-    }//GEN-LAST:event_InscribirMouseClicked
+    }//GEN-LAST:event_botonInscribirMouseClicked
 
-    private void InscribirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_InscribirActionPerformed
+    private void botonInscribirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonInscribirActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_InscribirActionPerformed
+    }//GEN-LAST:event_botonInscribirActionPerformed
 
-    private void DesinscribirMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_DesinscribirMouseClicked
+    private void botonDesinscribirMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botonDesinscribirMouseClicked
         // TODO add your handling code here:
-    }//GEN-LAST:event_DesinscribirMouseClicked
+    }//GEN-LAST:event_botonDesinscribirMouseClicked
 
     private void ConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ConfirmarActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_ConfirmarActionPerformed
 
+    private void botonBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonBuscarActionPerformed
+        if (!IDAlumno.getText().isEmpty()) {
+            int idAlumno = Integer.parseInt(IDAlumno.getText());
+            cargarMaterias(idAlumno);
+        } else {
+            JOptionPane.showMessageDialog(this, "Ingrese un ID de alumno válido.");
+        }
+    }//GEN-LAST:event_botonBuscarActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Confirmar;
-    private javax.swing.JRadioButton Desinscribir;
     private javax.swing.JTextField IDAlumno;
-    private javax.swing.JRadioButton Inscribir;
-    private javax.swing.JList<String> ListaMaterias;
     private javax.swing.JButton Salir;
+    private javax.swing.JTable TablaIncripcion;
+    private javax.swing.JButton botonBuscar;
+    private javax.swing.JRadioButton botonDesinscribir;
+    private javax.swing.JRadioButton botonInscribir;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     // End of variables declaration//GEN-END:variables
+
+    private void cargarMaterias(int idAlumno) {
+        DefaultTableModel modelo = new DefaultTableModel();
+        modelo.addColumn("ID Materia");
+        modelo.addColumn("Nombre");
+
+        TablaIncripcion.setModel(modelo);
+
+        String sql = "";
+
+        if (botonInscribir.isSelected()) {
+
+            sql = "SELECT m.idMateria, m.nombre "
+                    + "FROM materia m "
+                    + "WHERE m.estado = 1 AND m.idMateria NOT IN ("
+                    + "SELECT i.idMateria FROM inscripcion i WHERE i.idAlumno = ?)";
+        } else if (botonDesinscribir.isSelected()) {
+
+            sql = "SELECT m.idMateria, m.nombre "
+                    + "FROM materia m "
+                    + "JOIN inscripcion i ON m.idMateria = i.idMateria "
+                    + "WHERE i.idAlumno = ? AND m.estado = 1";
+        } else {
+            JOptionPane.showMessageDialog(this, "Seleccione Inscribir o Desinscribir.");
+            return;
+        }
+
+        try (java.sql.Connection con = Conexion.getConexion(); PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, idAlumno);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Object[] fila = {
+                    rs.getInt("idMateria"),
+                    rs.getString("nombre"),};
+                modelo.addRow(fila);
+
+                /*Object[] fila = new Object[2];
+                fila[0] = rs.getInt("idMateria");
+                fila[1] = rs.getString("nombre");
+                modelo.addRow(fila);*/
+            }
+
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Error al cargar materias: " + e.getMessage());
+        }
+    }
 }
