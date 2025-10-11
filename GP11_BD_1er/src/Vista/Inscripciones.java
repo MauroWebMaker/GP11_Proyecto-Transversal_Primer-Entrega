@@ -249,7 +249,8 @@ public class Inscripciones extends javax.swing.JInternalFrame {
             return;
         }
 
-        try (java.sql.Connection con = Conexion.getConexion(); PreparedStatement ps = con.prepareStatement(sql)) {
+        try (java.sql.Connection con = Conexion.getConexion(); 
+                PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setInt(1, idAlumno);
             ResultSet rs = ps.executeQuery();

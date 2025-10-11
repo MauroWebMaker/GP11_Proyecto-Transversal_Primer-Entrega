@@ -271,14 +271,6 @@ public class Calificaciones extends javax.swing.JInternalFrame {
             ps.setInt(2, idAlumno);
             ps.setInt(3, idMateria);
             ResultSet rs = ps.executeQuery();
-            
-            /*int filas = ps.executeUpdate();
-
-            if (filas > 0) {
-                JOptionPane.showMessageDialog(this, "Nota asignada correctamente.");
-            } else {
-                JOptionPane.showMessageDialog(this, "No se pudo asignar la nota.");
-            }*/
 
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, "Error al cargar nota." + e.getMessage());
