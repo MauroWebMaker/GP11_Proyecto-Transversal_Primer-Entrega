@@ -34,14 +34,14 @@ public class Calificaciones extends javax.swing.JInternalFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        botonConfirmar = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         comboAlumno = new javax.swing.JComboBox<>();
         comboMateria = new javax.swing.JComboBox<>();
         Alumno = new javax.swing.JTextField();
         jButton2 = new javax.swing.JButton();
-        jTextField3 = new javax.swing.JTextField();
+        notaAsignada = new javax.swing.JTextField();
         Materia = new javax.swing.JTextField();
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
@@ -52,16 +52,28 @@ public class Calificaciones extends javax.swing.JInternalFrame {
 
         jLabel3.setText("(solo personal administrativo)");
 
-        jButton1.setText("Confirmar");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        botonConfirmar.setText("Confirmar");
+        botonConfirmar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                botonConfirmarActionPerformed(evt);
             }
         });
 
         jLabel4.setText("ID de Alumno:");
 
         jLabel5.setText("Nota a asignar:");
+
+        comboAlumno.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboAlumnoActionPerformed(evt);
+            }
+        });
+
+        comboMateria.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboMateriaActionPerformed(evt);
+            }
+        });
 
         jButton2.setText("Salir");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -94,7 +106,7 @@ public class Calificaciones extends javax.swing.JInternalFrame {
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(jLabel5)
                                         .addGap(18, 18, 18)
-                                        .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(notaAsignada, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(comboMateria, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(18, 18, 18)
@@ -108,7 +120,7 @@ public class Calificaciones extends javax.swing.JInternalFrame {
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(159, 159, 159)
-                        .addComponent(jButton1)))
+                        .addComponent(botonConfirmar)))
                 .addContainerGap(18, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -129,11 +141,11 @@ public class Calificaciones extends javax.swing.JInternalFrame {
                 .addGap(43, 43, 43)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(notaAsignada, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jButton1)
+                        .addComponent(botonConfirmar)
                         .addGap(50, 50, 50)
                         .addComponent(jLabel3))
                     .addComponent(jButton2, javax.swing.GroupLayout.Alignment.TRAILING))
@@ -143,28 +155,49 @@ public class Calificaciones extends javax.swing.JInternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void botonConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonConfirmarActionPerformed
+        // Pimero tengo que verificar que el Alumno este inciripto en esa materia.
+        //Luego le tengo que asignar la nota segun el ID alumno + ID materia
+
+        int idAlumno = (int) comboAlumno.getSelectedItem();
+        int idMateria = (int) comboMateria.getSelectedItem();
+        double nota = Double.parseDouble(notaAsignada.getText());
+
+        confirmarNota(idAlumno, idMateria, nota);
+    }//GEN-LAST:event_botonConfirmarActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         this.dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    private void comboAlumnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboAlumnoActionPerformed
+        if (comboAlumno.getSelectedItem() != null) {
+            int idAlumno = (int) comboAlumno.getSelectedItem();
+            mostrarAlumno(idAlumno);
+        }
+    }//GEN-LAST:event_comboAlumnoActionPerformed
+
+    private void comboMateriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboMateriaActionPerformed
+        if (comboMateria.getSelectedItem() != null) {
+            int idMateria = (int) comboMateria.getSelectedItem();
+            mostrarMateria(idMateria);
+        }
+    }//GEN-LAST:event_comboMateriaActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField Alumno;
     private javax.swing.JTextField Materia;
+    private javax.swing.JButton botonConfirmar;
     private javax.swing.JComboBox<String> comboAlumno;
     private javax.swing.JComboBox<String> comboMateria;
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JTextField jTextField3;
+    private javax.swing.JTextField notaAsignada;
     // End of variables declaration//GEN-END:variables
 
     private void comboBoxAlumno() {
@@ -193,6 +226,64 @@ public class Calificaciones extends javax.swing.JInternalFrame {
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, "Error al cargar materias: " + e.getMessage());
         }
+    }
+
+    private void mostrarAlumno(int idAlumno) {
+        String sql = "SELECT nombre, apellido FROM alumno WHERE idAlumno = ?";
+        try (java.sql.Connection con = Conexion.getConexion(); PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, idAlumno);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                Alumno.setText(rs.getString("apellido") + ", " + rs.getString("nombre"));
+            }
+
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Error al mostrra alumno: " + e.getMessage());
+        }
+    }
+
+    private void mostrarMateria(int idMateria) {
+        String sql = "SELECT nombre FROM materia WHERE idMateria = ?";
+        try (java.sql.Connection con = Conexion.getConexion(); PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, idMateria);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                Materia.setText(rs.getString("materia"));
+            }
+
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Error al mostrra materia: " + e.getMessage());
+        }
+    }
+
+    private void confirmarNota(int idAlumno, int idMateria, double nota) {
+
+        String sql = "UPDATE inscripcion SET nota = ? "
+                + "WHERE idAlumno = ? AND idMateria = ?";
+
+        try (java.sql.Connection con = Conexion.getConexion(); PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setDouble(1, nota);
+            ps.setInt(2, idAlumno);
+            ps.setInt(3, idMateria);
+            ResultSet rs = ps.executeQuery();
+            
+            /*int filas = ps.executeUpdate();
+
+            if (filas > 0) {
+                JOptionPane.showMessageDialog(this, "Nota asignada correctamente.");
+            } else {
+                JOptionPane.showMessageDialog(this, "No se pudo asignar la nota.");
+            }*/
+
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Error al cargar nota." + e.getMessage());
+        }
+
     }
 
 }
